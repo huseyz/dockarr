@@ -1,0 +1,90 @@
+services:
+  prowlarr:
+    container_name: prowlarr
+    image: ghcr.io/hotio/prowlarr:latest
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Luxembourg
+    ports:
+      - 9696:9696
+    labels:
+      - dockarr.discover
+
+  sonarr:
+    container_name: sonarr
+    image: ghcr.io/hotio/sonarr:latest
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Luxembourg
+    ports:
+      - 8989:8989
+    labels:
+      - dockarr.discover
+
+  radarr:
+    container_name: radarr
+    image: ghcr.io/hotio/radarr:latest
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Luxembourg
+    ports:
+      - 7878:7878
+    labels:
+      - dockarr.discover
+
+  lidarr:
+    container_name: lidarr
+    image: ghcr.io/hotio/lidarr
+    ports:
+      - "8686:8686"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    labels:
+      - dockarr.discover
+
+  readarr:
+    container_name: readarr
+    image: ghcr.io/hotio/readarr
+    ports:
+      - "8787:8787"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    labels:
+      - dockarr.discover
+
+  transmission:
+    image: linuxserver/transmission:latest
+    container_name: transmission
+    restart: unless-stopped
+    environment:
+      - PGID=1000
+      - PUID=1000
+      - TZ=Etc/UTC
+      - USER=user
+      - PASS=pass
+    ports:
+      - 9091:9091
+    labels:
+      - dockarr.discover
+
+  dockarr:
+    container_name: dockarr
+    image: dockarr
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DELETE_BEHAVIOUR=disable
+      - LOG_LEVEL=debug
+      - SYNC_INTERVAL=10
